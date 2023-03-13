@@ -3,9 +3,6 @@ import { AppService } from './app.service';
 import { Request, Response } from 'express';
 import { MongoService } from './MongoDB/app.service';
 import { Emailservice } from './Mailer/app.service';
-import { dirname } from 'path/posix';
-import { fileURLToPath, pathToFileURL } from 'url';
-import path from 'path';
 
 @Controller()
 export class AppController {
@@ -20,7 +17,7 @@ export class AppController {
   
   @Get('home')
   async homepage(@Res() render: Response ) {
-    render.sendFile(process.cwd()+'/src/home.html');
+    render.sendFile(process.cwd()+'/HTML/home.html');
   }
   
   @Get('search')
@@ -34,7 +31,18 @@ export class AppController {
   }
 
   @Get('mail')
-  async send_mail(@Query('email') email: string) :Promise<any>{
-    return await this.emailService.plainTextEmail(email);//at9632
+  async send_mail(@Query('email') email: string,@Res() render: Response) :Promise<any>{
+    let otp=await this.appService.otp_generator();
+    //await this.emailService.plainTextEmail(email,otp);
+    await this.mongoService.update_otp(email,otp);
+    //await this.mongoService.update_count(email,"WRONG");
+    render.sendFile(process.cwd()+'/HTML/otp.html');
+  }
+
+  @Get('verify')
+  async verify_otp(@Query('otp') otp: string,@Res() render?: Response) :Promise<any>{
+    //await this.mongoService.verify_user();
+    
+    render.end();
   }
 }

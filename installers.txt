@@ -1,3 +1,4 @@
+nestjs = npm i -g @nestjs/cli
 new project = nest new
 mongodb = npm install mongodb --save
 .env configure = npm i --save @nestjs/config
