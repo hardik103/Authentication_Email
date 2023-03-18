@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        #detail_box
+        {
+            background-color:rgba(86, 38, 231, 0.471);
+            margin-left: 20%;
+            margin-right: 20%;
+            border-radius: 20px;
+            font-size: 25px;
+            font-family:'Courier New', Courier, monospace;
+            font-weight: bold;
+            b
+        }
+        #heading
+        {
+            color: rgb(255, 255, 255);
+            background-color: rgb(143, 67, 214);
+            border-radius: 40px;
+            margin-left: 20%;
+            margin-right: 20%;
+            text-align: center;
+            font-family:Georgia, 'Times New Roman', Times, serif;
+        }
+        #text
+        {
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            font-size: 25px;
+            font-weight:bold;
+            color: blueviolet;
+        }
+        .textbox
+        {
+            color: blueviolet;
+            font-size: 20px;
+            align-items:last baseline
+        }
+        .buttons
+        {
+            border-radius: 30px;
+            border-color: aliceblue;
+            font-size: 20px;
+            color: rgb(255, 255, 255);
+            background-color: rgb(143, 67, 214);
+        }
+    </style>
+    <script>
+        function reset_confirmation() {
+	    var res=prompt(`Are you sure to reset all marked answers (Y/N) ?`);
+	    if(res == 'y' || res== 'Y') document.getElementById('data').reset();
+	    else if(res!='n' && res!='N') alert(`Invalid Entry`);
+        }
+        function submit_confirmation() {
+        	var res=prompt(`Are you sure to submit the marked answers (Y/N) ?`);
+        	if(res == 'y' || res== 'Y') document.getElementById('data').submit();
+        	else if(res!='n' && res!='N') alert(`Invalid Entry`);
+        }
+    </script>
+</head>
+<body>
+    <form id="data" method="get" action="http://localhost:8080/mail?">
+    <H1 id="heading">SIGN-UP WINDOW</H1> 
+    <p id="text">ENTER YOUR DETAILS</p>
+    <div id="detail_box">
+    <br>
+    First Name : <input type="text" name="fname" class="textbox"><br><br>
+    Last Name : <input type="text" name="lname" class="textbox"><br><br> 
+    Email : <input type="email" name="email" class="textbox"><br><br>
+    Mobile : <input type="text" name="mobile" class="textbox"><br><br>
+    Gender<br>
+    <input type="radio" name='gender' value="male">
+	<label>Male</label><br>
+	<input type="radio" name='gender' value="female">
+	<label>Female</label><br>
+    <input type="radio" name='gender' value="other">
+	<label>Other</label><br><br>
+    <input type="button" value="Clear" onclick="reset_confirmation()" class="buttons">
+    <input type="button" value="Sign Up" onclick=submit_confirmation() class="buttons"><br><br>
+    </div>
+    </form>
+    <p id="text">ALREADY A USER ? <a href="http://localhost:8080/sign_in"><input type="button" value="Sign In" class="buttons"></a></p>
+    </form>
+</body>
+</html>

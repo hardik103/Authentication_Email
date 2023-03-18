@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Homepage</title>
+    <style>
+        body
+        {   
+            background-image: url("step.png");
+        }
+    </style>
 </head>
 <body>
-    <form align="center" method="get" action="http://localhost:8000/mail?">
-    Enter your email ID : 
-    <input type="email" name="email">
-    </form>
+    <a href="http://localhost:8080/sign_in"><input type="button" value="Sign In" class="buttons"></a>
+    <a href="http://localhost:8080/sign_up"><input type="button" value="Sign Up" class="buttons"></a>
 </body>
 </html>

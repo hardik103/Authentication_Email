@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        #detail_box
+        {
+            background-color:rgba(86, 38, 231, 0.471);
+            margin-left: 35%;
+            margin-right: 35%;
+            border-radius: 20px;
+            font-size: 20px;
+            font-family:'Courier New', Courier, monospace;
+            font-weight: bold;
+        }
+        #heading
+        {
+            color: rgb(255, 255, 255);
+            background-color: rgb(143, 67, 214);
+            border-radius: 40px;
+            margin-left: 20%;
+            margin-right: 20%;
+            text-align: center;
+            font-family:Georgia, 'Times New Roman', Times, serif;
+        }
+        #text
+        {
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            font-size: 25px;
+            font-weight:bold;
+            color: blueviolet;
+        }
+        #textbox
+        {
+            color: blueviolet;
+            background-color:rgb(201, 198, 198);
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <form method="get" action="http://localhost:8080/verify?">
+    <H1 id="heading">VERIFICATION WINDOW</H1> 
+    <p id="text">OTP sent to</p> 
+    <div align="center" id="detail_box">
+    Enter your OTP below<br>
+    <input type="number" name="otp" id="textbox">
+    </div>
+    </form>
+    <script>
+        let cookie_data=decodeURIComponent(document.cookie);//.split(';')
+        //for(i=0;i<cookie_data.length;i++)  cookie_data[i]=cookie_data[i].slice(cookie_data[i].indexOf("=")+1);
+        cookie_data=cookie_data.slice(cookie_data.indexOf("=")+1);
+        document.getElementById("text").innerText+=` ${cookie_data}`//cookie_data[0]+" "+cookie_data[1]+" "+cookie_data[2]}`;
+    </script>
+</body>
+</html>
