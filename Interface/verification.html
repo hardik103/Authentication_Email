@@ -9,13 +9,12 @@
         #detail_box
         {
             background-color:rgba(86, 38, 231, 0.471);
-            margin-left: 20%;
-            margin-right: 20%;
+            margin-left: 35%;
+            margin-right: 35%;
             border-radius: 20px;
-            font-size: 25px;
+            font-size: 20px;
             font-family:'Courier New', Courier, monospace;
             font-weight: bold;
-            b
         }
         #heading
         {
@@ -35,11 +34,11 @@
             font-weight:bold;
             color: blueviolet;
         }
-        .textbox
+        #textbox
         {
             color: blueviolet;
+            background-color:rgb(201, 198, 198);
             font-size: 20px;
-            align-items:last baseline
         }
         .buttons
         {
@@ -56,35 +55,26 @@
 	    if(res == 'y' || res== 'Y') document.getElementById('data').reset();
 	    else if(res!='n' && res!='N') alert(`Invalid Entry`);
         }
-        function submit_confirmation() {
-        	var res=prompt(`Are you sure to submit the marked answers (Y/N) ?`);
-        	if(res == 'y' || res== 'Y') document.getElementById('data').submit();
-        	else if(res!='n' && res!='N') alert(`Invalid Entry`);
-        }
     </script>
 </head>
 <body>
-    <form id="data" method="get" action="http://localhost:8080/mail?">
-    <H1 id="heading">SIGN-UP WINDOW</H1> 
-    <p id="text">ENTER YOUR DETAILS</p>
-    <div id="detail_box">
-    <br>
-    First Name : <input type="text" name="fname" class="textbox"><br><br>
-    Last Name : <input type="text" name="lname" class="textbox"><br><br> 
-    Email : <input type="email" name="email" class="textbox"><br><br>
-    Mobile : <input type="text" name="mobile" class="textbox"><br><br>
-    Gender<br>
-    <input type="radio" name='gender' value="male">
-	<label>Male</label><br>
-	<input type="radio" name='gender' value="female">
-	<label>Female</label><br>
-    <input type="radio" name='gender' value="other">
-	<label>Other</label><br><br>
-    <input type="button" value="Clear" onclick="reset_confirmation()" class="buttons">
-    <input type="button" value="Sign Up" onclick=submit_confirmation() class="buttons"><br><br>
-    </div>
-    </form>
-    <p id="text">ALREADY A USER ? <a href="http://localhost:8080/sign_in"><input type="button" value="Sign In" class="buttons"></a></p>
-    </form>
+    <form method="get" action="http://localhost:8080/verify?">
+    <H1 id="heading">VERIFICATION WINDOW</H1> 
+    <p id="text">OTP SENT TO </p> 
+    <div align="center" id="detail_box">
+    Enter your OTP <input type="number" name="otp" class="textbox"><br><br>
+    Generate Password <input type="password" name="email" class="textbox"><br>
+    ReEnter Password <input type="password" name="password" class="textbox"><br><br>
+    <input type="button" value="  Clear  " class="buttons" onclick="reset_confirmation()">
+    <input type="submit" value="Sign  Up" class="buttons"><br><br>
+</div>
+</form>
+<script>
+    let cookie_data=decodeURIComponent(document.cookie);//.split(';')
+    window.postMessage("hi");
+        //for(i=0;i<cookie_data.length;i++)  cookie_data[i]=cookie_data[i].slice(cookie_data[i].indexOf("=")+1);
+        cookie_data=cookie_data.slice(cookie_data.indexOf("=")+1);
+        document.getElementById("text").innerText+=` ${cookie_data}`//cookie_data[0]+" "+cookie_data[1]+" "+cookie_data[2]}`;
+    </script>
 </body>
 </html>

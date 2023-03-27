@@ -1,5 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { MongoClient} from 'mongodb';
+import { DetailsDto } from 'src/DTOs/details.dto';
+import { CredentialsDto } from 'src/DTOs/credentials.dto';
 
 @Injectable()
 export class MongoService {
@@ -9,17 +11,28 @@ export class MongoService {
     private connect: MongoClient,
   ) {}
 
-  async demo_data():Promise<any>{
-    return await this.connect.db('user-existing').collection('user-details').find({}).toArray();
+  async verify_user(obj:CredentialsDto):Promise<any>{
+    return await this.connect.db('user-registered').collection('credentials').findOne({"email":obj.email,"password":obj.password});
   }
 
-  async find_user():Promise<any>{
-    return await this.connect.db('user-existing').collection('user-details').find({"mobile":"+919695710487"}).toArray();
+  async find_user(email:string):Promise<any>{
+    return await this.connect.db('user-registered').collection('credentials').findOne({"email":email});
   }
 
-  async update_otp(email:string,otp:number):Promise<any>{
-    return await this.connect.db('demo-db').collection('demo-cl').updateOne({"email":email},{$set:{"otp":otp}});
+  async add_user(obj:DetailsDto):Promise<any>{
+    return await this.connect.db('user-unregistered').collection('details').updateOne({"email":obj.email},{$set:{
+      "email": obj.email,
+      "mobile": obj.mobile,
+      "first-name": obj.fname,
+      "last-name": obj.lname,
+      "gender": obj.gender,
+      "sign-up": "",
+      "sign-in": "",
+      "user-no": 1
+    }})
   }
+
+
 
   async update_count(email:string,attempt:string):Promise<any>{
     if (attempt == "WRONG")

@@ -7,7 +7,7 @@ export class Emailservice {
   constructor(private mailService: MailerService,
     private readonly mongoService: MongoService) {}
 
-  async plainTextEmail(email:string,otp:number):Promise<any>{
+  async send_email(email:string,otp:string):Promise<any>{
     console.log("Sending Email...");
     await this.mailService.sendMail({
      to: email,
@@ -18,5 +18,7 @@ export class Emailservice {
     console.log("Email Sent");
     return;
   };
+
+  
 
 }

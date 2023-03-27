@@ -1,8 +1,11 @@
-import { Controller, Get, Post, Req, Res, Param ,Query} from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, Param ,Query,Body} from '@nestjs/common';
 import { AppService } from './app.service';
 import { Request, Response } from 'express';
 import { MongoService } from './MongoDB/app.service';
 import { Emailservice } from './Mailer/app.service';
+import { DetailsDto } from './DTOs/details.dto';
+import { OtpDto } from './DTOs/otp.dto';
+import { CredentialsDto } from './DTOs/credentials.dto';
 
 @Controller()
 export class AppController {
@@ -11,31 +14,23 @@ export class AppController {
     private readonly emailService:Emailservice) {}
   
   @Get('home')
-  async homepage(@Res() render: Response ) {
-    render.clearCookie('email');
-    render.sendFile(process.cwd()+'/HTML/home.html');
+  async render_homepage(@Res() response_out: Response) {
+    response_out.clearCookie('email');
+    response_out.sendFile(process.cwd()+'/Interface/home.html');
   }
 
   @Get('sign_up')
-  async render_sign_in(@Res() response_out: Response) {
-    response_out.sendFile(process.cwd()+'/HTML/sign-up.html');
-  }
-
-  @Get('sign_in')
   async render_sign_up(@Res() response_out: Response) {
-    response_out.sendFile(process.cwd()+'/HTML/sign-in.html');
+    response_out.clearCookie('email');
+    response_out.sendFile(process.cwd()+'/Interface/sign-up.html');
   }
-
-  @Get('mail')
-  async send_mail(@Req() request_in:Request, @Query('email') email: string,@Res() render: Response) :Promise<any>{
-    //let otp=await this.appService.otp_generator();
-    //await this.emailService.plainTextEmail(email,otp);
-    //await this.mongoService.update_otp(email,otp);
-    //await this.mongoService.update_count(email,"WRONG");   
+  
+  @Post('verify')
+  async render_verify(@Req() request_in:Request,@Body() obj:DetailsDto,@Res() render: Response) :Promise<any>{
     //render.setHeader('email',email);
     //render.clearCookie('hi=hello;');
-    render.cookie('email',email);
-    render.sendFile(process.cwd()+'/HTML/verification.html');
+    render.clearCookie('email');
+    render.sendFile(process.cwd()+'/Interface/verification.html');
   }
 
   @Get('verify')
@@ -43,11 +38,36 @@ export class AppController {
     //await this.mongoService.verify_user();
     
     console.log(request_in.cookies.emai);
-    response_out.end();
+
+    response_out.sendFile(process.cwd()+'/Interface/home.html');
     //response_out.sendFile(process.cwd()+'/HTML/home.html');
   }
-}
 
-//console.log(request_in.cookies);
-//render.clearCookie(email);
-//console.log(request_in.cookies.email);
+  @Get('sign_in')
+  async render_sign_in(@Res() response_out: Response) {
+    response_out.clearCookie('email');
+    response_out.sendFile(process.cwd()+'/Interface/sign-in.html');
+  }
+
+  @Post('authenticate')
+  async render_website(@Body() obj:CredentialsDto,@Res() response_out: Response) {
+    response_out.setHeader('content-type','text/html');
+    if( !obj || ( !obj.email && !obj.password ) ){
+      response_out.send(`<script>alert('Email and Password Missing');location.replace('http://localhost:${process.env.LOCAL_HOST_PORT}/sign_in');</script>`);
+    }
+    else if( !obj.email ){
+      response_out.send(`<script>alert('Email Missing');location.replace('http://localhost:${process.env.LOCAL_HOST_PORT}/sign_in');</script>`);
+    }
+    else if( !obj.password ){
+      response_out.send(`<script>alert('Password Missing');location.replace('http://localhost:${process.env.LOCAL_HOST_PORT}/sign_in');</script>`);
+    }
+    else{
+      //cookies and webpage expected
+      if( !await this.appService.authenticate(obj) ) 
+      response_out.send(`<script>alert('User Not Signed Up');location.replace('http://localhost:${process.env.LOCAL_HOST_PORT}/sign_in');</script>`);
+      else
+      response_out.send(`<script>alert('User Found');location.replace('http://localhost:${process.env.LOCAL_HOST_PORT}/sign_in');</script>`);
+    }
+  }
+
+}
