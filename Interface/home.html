@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
+    <title>QUIZITIATE</title>
     <style>
         body{
+            background-image: url(assets/img/Cropped.jpg);
             background-image: url("https://png.pngtree.com/thumb_back/fh260/background/20200626/pngtree-abstract-futuristic-dual-color-blue-pink-neon-banner-image_340219.jpg");
             background-position: center center;
             background-repeat: no-repeat;
@@ -61,25 +62,16 @@
 
         }
     </style>
-    <script>
-        function focus(button){
-            window.focus(document.getElementsById(button));
-        }
-        function blur(button){
-            window.blur(document.getElementsById(button));
-        }
-    </script>
 </head>
 <body>
-    <p id="heading">EMAIL VERIFICATION AND AUTHENTICATION</p> 
+    <p id="heading">QUIZ CREATION AND HOSTING</p> 
     <hr id="hr">
-    <div id="detail_box">        
-        Welcome to Email Verification and Authentication<br>
-        This Project consists of Signing Up using an email by verifying through an OTP.
+    <div id="detail_box">
+        Create an MCQ based quiz with the questions and options that you want. Manage Sections and Questions in each Section. Free and easy Hosting.
     </div>
     <div id="extras" align="center">
-        <a href="http://localhost:8080/sign_in"><input type="button" class="buttons" value="SIGN IN"></a>
-        <a href="http://localhost:8080/sign_up"><input type="button" class="buttons" value="SIGN UP"></a>
+        <a href="/authentication_email/Interface/sign-in.html"><input type="button" class="buttons" value="SIGN IN"></a>
+        <a href="/authentication_email/Interface/sign-up.html"><input type="button" class="buttons" value="SIGN UP"></a>
     </div>
 </body>
 </html>
