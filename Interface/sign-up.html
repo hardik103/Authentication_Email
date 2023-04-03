@@ -8,7 +8,6 @@
     <style>
         #detail_box
         {
-            background-image: url("new.png");
             background-size: cover;
             background-color:rgba(86, 38, 231, 0.471);
             margin-left: 20%;
@@ -57,26 +56,39 @@
         }
     </style>
     <script>
-        function reset_confirmation() {
-	    var res=prompt(`Are you sure to reset all marked answers (Y/N) ?`);
-	    if(res == 'y' || res== 'Y') document.getElementById('data').reset();
-	    else if(res!='n' && res!='N') alert(`Invalid Entry`);
-        }
+        function api_caller(){
+            const form = document.querySelector("form");
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            const sender = JSON.stringify(data);
+    
+            const url = 'http://localhost:8080/generate?';
+            console.log(sender);
+            
+            const caller = new XMLHttpRequest();
+            caller.open('POST',url);     
+            caller.setRequestHeader('Content-Type', 'application/json');
+            console.log("");
+            caller.onload = function() {
+                console.log(caller.status);
+                console.log(caller.statusText);
+                console.log(JSON.parse(caller.responseText));
+            }
+            caller.send(sender);
+        };
     </script>
 </head>
 <body>
-    <form id="data" method="get" action="http://localhost:8080/generate?">
     <H1 id="heading">SIGN-UP WINDOW</H1> 
     <p id="text">ENTER YOUR DETAILS</p>
-    <div id="detail_box">
-    <br>
-    <div id="form">
+    <div id="detail_box"><br>
+    <form id="form">
+    Email<br>
+    <input type="email" name="email" class="textbox"><br><br>
     First Name<br>
     <input type="text" name="fname" class="textbox"><br><br>
     Last Name<br>
     <input type="text" name="lname" class="textbox"><br><br> 
-    Email<br>
-    <input type="email" name="email" class="textbox"><br><br>
     Mobile<br>
     <input type="number" name="mobile" class="textbox"><br><br>
     Gender<br>
@@ -86,11 +98,10 @@
 	<label>Female</label><br>
     <input type="radio" name='gender' value="other">
 	<label>Other</label><br><br>
-    <input type="button" value="Clear" onclick="reset_confirmation()" class="buttons">
-    <input type="submit" value="Generate" class="buttons"><br><br>
-    </div></div>
+    <input type="reset" value="CLEAR" class="buttons">
+    <input type="button" value="GENERATE" class="buttons" onclick="api_caller()"><br><br>
+    </div>
     </form>
-    <p id="text">ALREADY A USER ? <a href="http://localhost:8080/sign_in"><input type="button" value="Sign In" class="buttons"></a></p>
-    </form>
+    <p id="text">ALREADY A USER ? <a href="/authentication_email/Interface/sign-in.html"><input type="button" value="SIGN IN" class="buttons"></a></p>
 </body>
 </html>
