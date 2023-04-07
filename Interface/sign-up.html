@@ -56,26 +56,31 @@
         }
     </style>
     <script>
-        function api_caller(){
+        function api_details(){
             const form = document.querySelector("form");
             const formData = new FormData(form);
             const data = Object.fromEntries(formData);
             const sender = JSON.stringify(data);
     
-            const url = 'http://localhost:8080/generate?';
             console.log(sender);
             
             const caller = new XMLHttpRequest();
+            const url = 'http://localhost:8080/generate?';
             caller.open('POST',url);     
             caller.setRequestHeader('Content-Type', 'application/json');
-            console.log("");
             caller.onload = function() {
-                console.log(caller.status);
-                console.log(caller.statusText);
-                console.log(JSON.parse(caller.responseText));
+            response_got=JSON.parse(caller.responseText);
+            //console.log(response_got);
+            //console.log(caller.status);
+            //console.log(caller.statusText);
+            if( response_got.status === 100 && window.confirm(`OTP will be sent to ${data.email}`) === true ){
+                    window.location.href = "./verification.html";
+            }else{
+                alert(response_got.message);
             }
-            caller.send(sender);
-        };
+        }
+        caller.send(sender);
+    }
     </script>
 </head>
 <body>
@@ -92,14 +97,14 @@
     Mobile<br>
     <input type="number" name="mobile" class="textbox"><br><br>
     Gender<br>
-    <input type="radio" name='gender' value="male">
+    <input type="radio" name='gender' value="Male">
 	<label>Male</label><br>
-	<input type="radio" name='gender' value="female">
+	<input type="radio" name='gender' value="Female">
 	<label>Female</label><br>
-    <input type="radio" name='gender' value="other">
+    <input type="radio" name='gender' value="Other">
 	<label>Other</label><br><br>
     <input type="reset" value="CLEAR" class="buttons">
-    <input type="button" value="GENERATE" class="buttons" onclick="api_caller()"><br><br>
+    <input type="button" value="GENERATE" class="buttons" onclick="api_details()"><br><br>
     </div>
     </form>
     <p id="text">ALREADY A USER ? <a href="/authentication_email/Interface/sign-in.html"><input type="button" value="SIGN IN" class="buttons"></a></p>

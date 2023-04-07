@@ -7,7 +7,15 @@ export class Emailservice {
   constructor(private mailService: MailerService,
     private readonly mongoService: MongoService) {}
 
-  async send_email(email:string,otp:string):Promise<any>{
+  async send_email( email : string ) : Promise<any> {
+    var otp = 0;
+    console.log("Generating OTP...");
+    do{
+      otp=Math.round(Math.random()*1000000);
+
+    }while( otp < 100000 )
+    console.log("OTP Generated");
+    console.log(otp);
     console.log("Sending Email...");
     await this.mailService.sendMail({
      to: email,

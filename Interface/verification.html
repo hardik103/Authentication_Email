@@ -49,13 +49,6 @@
             background-color: rgb(143, 67, 214);
         }
     </style>
-    <script>
-        function reset_confirmation() {
-	    var res=prompt(`Are you sure to reset all marked answers (Y/N) ?`);
-	    if(res == 'y' || res== 'Y') document.getElementById('data').reset();
-	    else if(res!='n' && res!='N') alert(`Invalid Entry`);
-        }
-    </script>
 </head>
 <body>
     <form method="get" action="http://localhost:8080/verify?">
@@ -67,14 +60,19 @@
     ReEnter Password <input type="password" name="password" class="textbox"><br><br>
     <input type="button" value="  Clear  " class="buttons" onclick="reset_confirmation()">
     <input type="submit" value="Sign  Up" class="buttons"><br><br>
+    <input type="button" value="  GO  " class="buttons" onclick="res()">
 </div>
 </form>
 <script>
-    let cookie_data=decodeURIComponent(document.cookie);//.split(';')
-    window.postMessage("hi");
+    function res(){
+    var cookie_string=decodeURIComponent(document.cookie);//.split(';')
+    var cookie_data=JSON.parse(cookie_string);
+    console.log(cookie_data);
+    //window.postMessage("hi");
         //for(i=0;i<cookie_data.length;i++)  cookie_data[i]=cookie_data[i].slice(cookie_data[i].indexOf("=")+1);
-        cookie_data=cookie_data.slice(cookie_data.indexOf("=")+1);
-        document.getElementById("text").innerText+=` ${cookie_data}`//cookie_data[0]+" "+cookie_data[1]+" "+cookie_data[2]}`;
+        //cookie_data=cookie_data.slice(cookie_data.indexOf("=")+1);
+        //document.getElementById("text").innerText+=`${cookie_data.email}`//cookie_data[0]+" "+cookie_data[1]+" "+cookie_data[2]}`;
+    }
     </script>
 </body>
 </html>

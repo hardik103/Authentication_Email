@@ -6,68 +6,114 @@ import { Emailservice } from './Mailer/app.service';
 import { DetailsDto } from './DTOs/details.dto';
 import { OtpDto } from './DTOs/otp.dto';
 import { CredentialsDto } from './DTOs/credentials.dto';
+import { ResetDto } from './DTOs/reset.dto';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService,
     private readonly mongoService: MongoService,
     private readonly emailService:Emailservice) {}
-  
-  @Get('home')
-  async render_homepage(@Res() response_out: Response) {
-    response_out.clearCookie('email');
-    response_out.sendFile(process.cwd()+'/Interface/home.html');
-  }
+    
+    @Get('direct')
+    async render_guide_page( @Res() response_out: Response ) {
+      //response_out.sendFile(https.get())
+      const caller = new XMLHttpRequest();
+      caller.open('GET','https://first-demo-bucket-103.s3.ap-south-1.amazonaws.com/home.html')
+  //response_out.location('https://first-demo-bucket-103.s3.ap-south-1.amazonaws.com/home.html');
+  //response_out.redirect('https://first-demo-bucket-103.s3.ap-south-1.amazonaws.com/home.html');
+}
 
-  @Get('sign_up')
-  async render_sign_up(@Res() response_out: Response) {
-    response_out.clearCookie('email');
+  @Get('home')
+  async render_working_page(@Res() response_out: Response) {
     response_out.sendFile(process.cwd()+'/Interface/sign-up.html');
   }
-  
-  @Post('verify')
-  async render_verify(@Req() request_in:Request,@Body() obj:DetailsDto,@Res() render: Response) :Promise<any>{
-    //render.setHeader('email',email);
-    //render.clearCookie('hi=hello;');
-    render.clearCookie('email');
-    render.sendFile(process.cwd()+'/Interface/verification.html');
-  }
 
-  @Get('verify')
-  async verify_otp(@Req() request_in:Request, @Query('otp') otp: string, @Res() response_out: Response) :Promise<any>{
-    //await this.mongoService.verify_user();
-    
-    console.log(request_in.cookies.emai);
-
-    response_out.sendFile(process.cwd()+'/Interface/home.html');
-    //response_out.sendFile(process.cwd()+'/HTML/home.html');
-  }
-
-  @Get('sign_in')
-  async render_sign_in(@Res() response_out: Response) {
-    response_out.clearCookie('email');
-    response_out.sendFile(process.cwd()+'/Interface/sign-in.html');
+  @Post('generate')
+  async sign_up(@Body() details : DetailsDto, @Res() response_out: Response) :Promise<any>{
+    console.log(details);
+    try{
+      if( !details || ( !details.email && !details.fname ) ){
+        response_out.json({
+          "status":911,
+          "message":"Email and First Name Missing"
+        });
+      }else if( !details.fname ){
+        response_out.json({
+          "status":912,
+          "message":"First Name Missing"
+        });
+      }else if( !details.email ){
+        response_out.json({
+          "status":913,
+          "message":"Email Missing"
+        });
+      }else{
+        response_out.json( await this.appService.details_passed(details));
+      }
+    }catch{
+      response_out.json({
+        "status":999,
+        "message":"Server Error"
+      });
+    }finally{
+      console.log("...............................................");
+    }
+      
   }
 
   @Post('authenticate')
-  async render_website(@Body() obj:CredentialsDto,@Res() response_out: Response) {
-    response_out.setHeader('content-type','text/html');
-    if( !obj || ( !obj.email && !obj.password ) ){
-      response_out.send(`<script>alert('Email and Password Missing');location.replace('http://localhost:${process.env.LOCAL_HOST_PORT}/sign_in');</script>`);
-    }
-    else if( !obj.email ){
-      response_out.send(`<script>alert('Email Missing');location.replace('http://localhost:${process.env.LOCAL_HOST_PORT}/sign_in');</script>`);
-    }
-    else if( !obj.password ){
-      response_out.send(`<script>alert('Password Missing');location.replace('http://localhost:${process.env.LOCAL_HOST_PORT}/sign_in');</script>`);
-    }
-    else{
-      //cookies and webpage expected
-      if( !await this.appService.authenticate(obj) ) 
-      response_out.send(`<script>alert('User Not Signed Up');location.replace('http://localhost:${process.env.LOCAL_HOST_PORT}/sign_in');</script>`);
-      else
-      response_out.send(`<script>alert('User Found');location.replace('http://localhost:${process.env.LOCAL_HOST_PORT}/sign_in');</script>`);
+  async sign_in(@Body() credentials : CredentialsDto,@Res() response_out: Response) : Promise<any> {
+    console.log(credentials);
+    try{
+      if( !credentials || ( !credentials.email && !credentials.password ) ){
+        response_out.json({
+          "status":991,
+          "message":"Email and Password Missing"
+        });
+      }else if( !credentials.email ){
+        response_out.json({
+          "status":992,
+          "message":"Email Missing"
+        });
+      }else if( !credentials.password ){
+        response_out.json({
+          "status":993,
+          "message":"Password Missing"
+        });
+      }else{
+        response_out.json(await this.appService.credentials_passed(credentials));
+      }
+    }catch{
+      response_out.json({
+        "status":999,
+        "message":"Server Error"
+      });
+    }finally{
+      console.log("...............................................");
     }
   }
+
+  @Post('reset')
+  async password_reset(@Body() reset : ResetDto, @Res() response_out : Response) : Promise<any> {
+    console.log(reset);
+    try{
+      if( !reset || !reset.email ){
+        response_out.json({
+          "status":901,
+          "message":"Email Missing"
+        });
+      }else{
+        response_out.json(await this.appService.email_passed(reset.email) );
+      }
+    }catch{
+      response_out.json({
+        "status":999,
+        "message":"Server Error"
+      });
+    }finally{
+      console.log('..............................................');
+    }
+  }
+  
 
 }

@@ -7,6 +7,7 @@ async function bootstrap() {
   app.use(cookieParser());
   let port=process.env.LOCAL_HOST_PORT;
   await app.listen(port);
-  console.log(`server is up at http://localhost:${port}/home`)
+  console.log(`You're good to go\nhttp://localhost:${port}/direct`)
+  console.log("...................................................")
 }
 bootstrap();

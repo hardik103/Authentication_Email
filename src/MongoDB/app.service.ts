@@ -11,34 +11,78 @@ export class MongoService {
     private connect: MongoClient,
   ) {}
 
-  async verify_user(obj:CredentialsDto):Promise<any>{
-    return await this.connect.db('user-registered').collection('credentials').findOne({"email":obj.email,"password":obj.password});
+//.............................................................................................................................
+  
+  // checks the pair of email and password matches or not
+  async user_credentials_match(credentials:CredentialsDto):Promise<any>{
+    return await this.connect.db('user-registered').collection('credentials').findOne({"email":credentials.email,"password":credentials.password});
   }
 
-  async find_user(email:string):Promise<any>{
-    return await this.connect.db('user-registered').collection('credentials').findOne({"email":email});
+  // finds user in signed up user(registered) data set
+  async user_sign_up_completed(email: string):Promise<any>{
+    return await this.connect.db('user-registered').collection('details').findOne({"email":email});
   }
 
-  async add_user(obj:DetailsDto):Promise<any>{
-    return await this.connect.db('user-unregistered').collection('details').updateOne({"email":obj.email},{$set:{
-      "email": obj.email,
-      "mobile": obj.mobile,
-      "first-name": obj.fname,
-      "last-name": obj.lname,
-      "gender": obj.gender,
+  // finds user in incompleted user(unregistered) data set
+  async user_sign_up_incompleted(email : string) : Promise<any> {
+    return await this.connect.db('user-unregistered').collection('details').findOne({"email":email});
+  }
+
+
+//........................................................................................................
+
+
+  // updates details collection of pending user(unregistered) data set
+  async update_pending_user_details(details:DetailsDto) : Promise<any> {
+    return await this.connect.db('user-unregistered').collection('details').updateOne({"email":details.email},{$set:{
+      "email": details.email,
+      "mobile": details.mobile,
+      "first-name": details.fname,
+      "last-name": details.lname,
+      "gender": details.gender,
       "sign-up": "",
       "sign-in": "",
-      "user-no": 1
-    }})
+      "user-no": 0
+    }});
   }
 
-
-
-  async update_count(email:string,attempt:string):Promise<any>{
-    if (attempt == "WRONG")
-    return await this.connect.db('demo-db').collection('demo-cl').updateOne({"email":email},{$inc:{"otp-verify":-1}});
-    else if (attempt == "RESEND")
-    return await this.connect.db('demo-db').collection('demo-cl').updateOne({"email":email},{$inc:{"otp-resend":-1}});
+  // updates attempts collection of pending user(unregistered) data set
+  async update_pending_user_attempts(details : DetailsDto) : Promise<any> {
+    return await this.connect.db('user-unregistered').collection('attempts').updateOne({"email":details.email},{$set:{
+      "mobile": details.mobile
+    }});
   }
+
+//................................................................................................................
+
+
+  // inserts in details collection of pending user(unregistered) data set
+  async insert_pending_user_details(details:DetailsDto) : Promise<any> {
+    return await this.connect.db('user-unregistered').collection('details').insertOne({
+      "email": details.email,
+      "mobile": details.mobile,
+      "first-name": details.fname,
+      "last-name": details.lname,
+      "gender": details.gender,
+      "sign-up": "",
+      "sign-in": "",
+      "user-no": 0
+    });
+  }
+
+  // inserts in attempts collection of pending user(unregistered) data set
+  async insert_pending_user_attempts(details : DetailsDto) : Promise<any> {
+    return await this.connect.db('user-unregistered').collection('attempts').insertOne({
+      "email": details.email,
+      "mobile": details.mobile,
+      "otp-resend": 3,
+      "otp-verify": 6,
+      "otp": 0
+    });
+  }
+  
+//..........................................................................................................................
+  
+
   
 }
