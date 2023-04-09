@@ -1,5 +1,5 @@
 export class OtpDto {
+    email: string;
     otp: string;
-    pass1: string;
-    pass2: string;
+    password: string;
 }

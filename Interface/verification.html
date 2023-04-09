@@ -49,29 +49,122 @@
             background-color: rgb(143, 67, 214);
         }
     </style>
+    <script>
+        var email = "demo_email.gmail.com";
+        function api_otp(){
+            const form = document.querySelector("form");
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            const sender = JSON.stringify(data);
+            
+            var obj = sender.substring(0,sender.length-1);
+            obj = obj.concat(`,"email":"${email}"}`)
+    
+            console.log(obj);
+            
+            const caller = new XMLHttpRequest();
+            const url = 'http://localhost:8080/generate?';
+            caller.open('POST',url);     
+            caller.setRequestHeader('Content-Type', 'application/json');
+            caller.onload = function() {
+            response_got=JSON.parse(caller.responseText);
+            //console.log(response_got);
+            //console.log(caller.status);
+            //console.log(caller.statusText);
+            if( response_got.status === 100 && window.confirm(`OTP will be sent to ${data.email}`) === true ){
+                window.location.href = "./verification.html";
+            }else{
+                alert(response_got.message);
+            }
+        }
+        caller.send(obj);
+    }
+
+
+    function check_length(name){
+        var length = document.getElementById(name).value.length;
+        var text_color;
+        if( name == "otp"){
+            if( length==6 ){
+                text_color = "Green";
+            }else{
+                text_color = "Red";
+            }
+        }else{
+            if( length>=8 ){
+                text_color = "Green";
+            }else{
+                text_color = "Red";
+            }
+        }
+        document.getElementById(name).style.color = text_color;
+    }
+
+
+    function check_conditions(){
+        var otp = document.getElementById('otp').value;
+        var pass_1 = document.getElementById('password_1').value;
+        var pass_2 = document.getElementById('password_2').value;
+        if( !otp && (!pass_1 && !pass_2) ){
+            alert("Enter the details");
+        }else if( !otp || !pass_1 || !pass_2 ){
+            if( !otp ){
+                if( !pass_1 || !pass_2 ){
+                    alert("OTP and Either of the password is missing");
+                }else{
+                    alert("OTP missing");
+                }
+            }else if( !pass_1 && !pass_2 ){
+                alert("Set a Password");    
+            }else{
+                alert("Enter your Password in both the Fields");
+            }
+        }else{
+            if( otp.length != 6 && ( pass_1.length < 8 && pass_2.length < 8 )){
+                alert("OTP and Passwords not valid");
+            }else if( otp.length != 6 || pass_1.length < 8 || pass_2.length < 8 ){
+                if( otp.length != 6 ){
+                    if( pass_1.length < 8 ||pass_2.length < 8 ){
+                        alert("OTP and Either of the password is invalid");
+                    }else{
+                        alert("OTP Invalid");
+                    }
+                }else{
+                    if( pass_1.length < 8 && pass_2.length < 8 ){
+                        alert("Passwords invalid");
+                    }else{
+                        alert("Either of the password is invalid");
+                    }
+                }
+            }else{
+                if( pass_1 != pass_2){
+                    alert("Passwords not matching");
+                }else{
+                    api_otp();
+                }
+            }
+        }
+
+    }
+    </script>
 </head>
 <body>
-    <form method="get" action="http://localhost:8080/verify?">
     <H1 id="heading">VERIFICATION WINDOW</H1> 
     <p id="text">OTP SENT TO </p> 
     <div align="center" id="detail_box">
-    Enter your OTP <input type="number" name="otp" class="textbox"><br><br>
-    Generate Password <input type="password" name="email" class="textbox"><br>
-    ReEnter Password <input type="password" name="password" class="textbox"><br><br>
-    <input type="button" value="  Clear  " class="buttons" onclick="reset_confirmation()">
-    <input type="submit" value="Sign  Up" class="buttons"><br><br>
-    <input type="button" value="  GO  " class="buttons" onclick="res()">
+    <form>
+    Enter your OTP <input type="number" name="otp" class="textbox" oninput="check_length('otp')" id="otp"><br><br>
+    Create Password <input type="password" name="password" class="textbox" oninput="check_length('password_1')" id="password_1"><br>
+    ReEnter Password <input type="password" class="textbox" oninput="check_length('password_2')" id="password_2"><br><br>
+    <input type="reset" value="  Clear  " class="buttons">
+    <input type="button" value="Sign  Up" class="buttons" onclick="check_conditions()"><br><br>
+    </form>
 </div>
-</form>
 <script>
     function res(){
-    var cookie_string=decodeURIComponent(document.cookie);//.split(';')
+    var cookie_string=decodeURIComponent(document.cookie);
     var cookie_data=JSON.parse(cookie_string);
-    console.log(cookie_data);
-    //window.postMessage("hi");
-        //for(i=0;i<cookie_data.length;i++)  cookie_data[i]=cookie_data[i].slice(cookie_data[i].indexOf("=")+1);
-        //cookie_data=cookie_data.slice(cookie_data.indexOf("=")+1);
-        //document.getElementById("text").innerText+=`${cookie_data.email}`//cookie_data[0]+" "+cookie_data[1]+" "+cookie_data[2]}`;
+    console.log(cookie_data.email);
     }
     </script>
 </body>
