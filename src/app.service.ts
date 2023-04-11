@@ -3,6 +3,7 @@ import { CredentialsDto } from './DTOs/credentials.dto';
 import { MongoService } from './MongoDB/app.service';
 import { Emailservice } from './Mailer/app.service';
 import { DetailsDto } from './DTOs/details.dto';
+import { OtpDto } from './DTOs/otp.dto';
 
 @Injectable()
 export class AppService {
@@ -94,7 +95,8 @@ export class AppService {
           "message":"User Not Found"
         };  
       }else{
-        //await this.emailService.send_email(email);
+        //var otp = await this.emailService.send_email(email);
+        //await this.mongoService.update_otp(email,otp);
         return {
           "status":100,
           "message":"User Found"
@@ -106,5 +108,11 @@ export class AppService {
         "message":"Server Error"
       };
     }
+  }
+
+  //..............................................................................................................................
+
+  async otp_passed( verificator : OtpDto ) : Promise<any> {
+    
   }
 }  

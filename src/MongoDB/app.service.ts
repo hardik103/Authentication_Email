@@ -83,6 +83,10 @@ export class MongoService {
   
 //..........................................................................................................................
   
-
+  async update_otp(email:string,otp:number) : Promise<any> {
+    return await this.connect.db('user-unregistered').collection('attempts').updateOne({"email":email},{$set:{
+      "otp": otp
+    }});
+  }
   
 }

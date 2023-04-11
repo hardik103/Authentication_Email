@@ -13,19 +13,10 @@ export class AppController {
   constructor(private readonly appService: AppService,
     private readonly mongoService: MongoService,
     private readonly emailService:Emailservice) {}
-    
-    @Get('direct')
-    async render_guide_page( @Res() response_out: Response ) {
-      //response_out.sendFile(https.get())
-      const caller = new XMLHttpRequest();
-      caller.open('GET','https://first-demo-bucket-103.s3.ap-south-1.amazonaws.com/home.html')
-  //response_out.location('https://first-demo-bucket-103.s3.ap-south-1.amazonaws.com/home.html');
-  //response_out.redirect('https://first-demo-bucket-103.s3.ap-south-1.amazonaws.com/home.html');
-}
 
-  @Get('home')
+  @Get('direct')
   async render_working_page(@Res() response_out: Response) {
-    response_out.sendFile(process.cwd()+'/Interface/sign-up.html');
+    response_out.sendFile(process.cwd()+'/Interface/verification.html');
   }
 
   @Post('generate')
@@ -59,6 +50,52 @@ export class AppController {
       console.log("...............................................");
     }
       
+  }
+
+  @Post('register')
+  async verify( @Body() verificator : OtpDto , @Res() response_out : Response ) : Promise<any> {
+    try{
+      if( !verificator || ( !verificator.otp && !verificator.email && !verificator.password ) ){
+        response_out.json({
+          "status":0,
+          "message":"OTP, Email and Password Missing"
+        });
+      }else if( !verificator.otp && ( verificator.email && verificator.password ) ){
+        response_out.json({
+          "status":0,
+          "message":"OTP Missing"
+        });
+      }else if( !verificator.email && ( verificator.otp && verificator.password ) ){
+        response_out.json({
+          "status":0,
+          "message":"Email Missing"
+        });
+      }else if( !verificator.password && ( verificator.otp && verificator.email ) ){
+        response_out.json({
+          "status":0,
+          "message":"Password Missing"
+        });
+      }else if( ( !verificator.otp && !verificator.email ) && verificator.password ){
+        response_out.json({
+          "status":0,
+          "message":"OTP and Email Missing"
+        });
+      }else if( ( !verificator.otp && !verificator.password ) && verificator.email ){
+        response_out.json({
+          "status":0,
+          "message":"OTP and Password Missing"
+        });
+      }else if( ( !verificator.email && !verificator.password ) && verificator.otp ){
+        response_out.json({
+          "status":0,
+          "message":"Email and Password Missing"
+        });
+      }else{
+        response_out.json( await this.appService.otp_passed(verificator) );
+      }
+    }catch{
+
+    }
   }
 
   @Post('authenticate')
@@ -115,5 +152,9 @@ export class AppController {
     }
   }
   
+  @Get('working')
+  async demo(){
+    return 1000;
+  }
 
 }

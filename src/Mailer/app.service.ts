@@ -24,7 +24,7 @@ export class Emailservice {
      text: `Hi,\nYour OTP to login to Hardy.com is ${otp}`,
     });
     console.log("Email Sent");
-    return;
+    return otp;
   };
 
   
