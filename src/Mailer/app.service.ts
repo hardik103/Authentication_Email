@@ -17,13 +17,13 @@ export class Emailservice {
     console.log("OTP Generated");
     console.log(otp);
     console.log("Sending Email...");
-    await this.mailService.sendMail({
+    /*await this.mailService.sendMail({
      to: email,
      from: process.env.SENDER_EMAIL,
      subject: `Hardy.com Login OTP`,
      text: `Hi,\nYour OTP to login to Hardy.com is ${otp}`,
     });
-    console.log("Email Sent");
+    console.log("Email Sent");*/
     return otp;
   };
 

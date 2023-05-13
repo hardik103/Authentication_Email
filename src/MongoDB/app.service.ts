@@ -83,10 +83,66 @@ export class MongoService {
   
 //..........................................................................................................................
   
+  async fetch_resend_count( email:string ) : Promise<any> {
+    return await this.connect.db('user-unregistered').collection('attempts').findOne({"email":email});
+  }
+
+  async update_resend_count( email:string ) : Promise<any> {
+    return await this.connect.db('user-unregistered').collection('attempts').updateOne({"email":email},{$inc:{
+      "otp-resend": -1
+    }});
+  }
+
   async update_otp(email:string,otp:number) : Promise<any> {
     return await this.connect.db('user-unregistered').collection('attempts').updateOne({"email":email},{$set:{
       "otp": otp
     }});
   }
-  
+
+  //..............................................................................................................
+
+  async fetch_attempts( email:string ) : Promise<any> {
+    return await this.connect.db('user-unregistered').collection('attempts').findOne({"email":email});
+  }
+
+  async fetch_details( email:string ) : Promise<any> {
+    return await this.connect.db('user-unregistered').collection('details').findOne({"email":email});
+  }
+
+  async delete_attempts( email:string ) : Promise<any> {
+    return await this.connect.db('user-unregistered').collection('attempts').deleteOne({"email":email});
+  }
+
+  async delete_details( email:string ) : Promise<any> {
+    return await this.connect.db('user-unregistered').collection('details').deleteOne({"email":email});
+  }
+
+  //...........................................................................................................
+
+  async reinsert_attempts( document : Object ) : Promise<any> {
+    return await this.connect.db('user-unregistered').collection('attempts').insertOne(document);
+  }
+
+  async reinsert_details( document : Object ) : Promise<any> {
+    return await this.connect.db('user-unregistered').collection('details').insertOne(document);
+  }
+
+  async reinsert_credentials( document : Object ) : Promise<any> {
+    return await this.connect.db('user-unregistered').collection('details').insertOne(document);
+  }
+
+  //...........................................................................................................
+
+  async demo_func() :Promise<any>{
+    await this.connect.db('new').createCollection('demo');
+  }
+
+  async demo_rename() :Promise<any>{
+    await this.connect.db('new').renameCollection('demo','myName');
+  }
+
+  async demo_remove() :Promise<any>{
+    await this.connect.db('new').dropCollection('new');
+  }
+
 }

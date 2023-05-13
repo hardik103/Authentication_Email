@@ -7,6 +7,8 @@ import { DetailsDto } from './DTOs/details.dto';
 import { OtpDto } from './DTOs/otp.dto';
 import { CredentialsDto } from './DTOs/credentials.dto';
 import { ResetDto } from './DTOs/reset.dto';
+import { get } from 'http';
+import { url } from 'inspector';
 
 @Controller()
 export class AppController {
@@ -15,13 +17,14 @@ export class AppController {
     private readonly emailService:Emailservice) {}
 
   @Get('direct')
-  async render_working_page(@Res() response_out: Response) {
-    response_out.sendFile(process.cwd()+'/Interface/verification.html');
+  async render_working_page( @Req() request_in : Request, @Res() response_out: Response) {
+    //response_out.redirect('https://authentication-interface.s3.ap-south-1.amazonaws.com/verification.html');
+    response_out.cookie('email','hardikpandey9244');
+    response_out.sendFile('/Users/Hardik/OneDrive/Documents/IDE/Interface/verification.html');
   }
 
   @Post('generate')
   async sign_up(@Body() details : DetailsDto, @Res() response_out: Response) :Promise<any>{
-    console.log(details);
     try{
       if( !details || ( !details.email && !details.fname ) ){
         response_out.json({
@@ -154,7 +157,20 @@ export class AppController {
   
   @Get('working')
   async demo(){
-    return 1000;
+    await this.mongoService.demo_func();
+    return;
+  }
+
+  @Get('rename')
+  async rename(){
+    await this.mongoService.demo_rename();
+    return;
+  }
+
+  @Get('remove')
+  async remove(){
+    await this.mongoService.demo_remove();
+    return;
   }
 
 }

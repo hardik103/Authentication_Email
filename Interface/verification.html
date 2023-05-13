@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        #detail_box
+        {
+            background-color:rgba(86, 38, 231, 0.471);
+            margin-left: 35%;
+            margin-right: 35%;
+            border-radius: 20px;
+            font-size: 20px;
+            font-family:'Courier New', Courier, monospace;
+            font-weight: bold;
+        }
+        #heading
+        {
+            color: rgb(255, 255, 255);
+            background-color: rgb(143, 67, 214);
+            border-radius: 40px;
+            margin-left: 20%;
+            margin-right: 20%;
+            text-align: center;
+            font-family:Georgia, 'Times New Roman', Times, serif;
+        }
+        #text
+        {
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            font-size: 25px;
+            font-weight:bold;
+            color: blueviolet;
+        }
+        #textbox
+        {
+            color: blueviolet;
+            background-color:rgb(201, 198, 198);
+            font-size: 20px;
+        }
+        .buttons
+        {
+            border-radius: 30px;
+            border-color: aliceblue;
+            font-size: 20px;
+            color: rgb(255, 255, 255);
+            background-color: rgb(143, 67, 214);
+        }
+    </style>
+    <script>
+        var email = "demo_email.gmail.com";
+        function api_otp(){
+            const form = document.querySelector("form");
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            const sender = JSON.stringify(data);
+            
+            var obj = sender.substring(0,sender.length-1);
+            obj = obj.concat(`,"email":"${email}"}`)
+    
+            console.log(obj);
+            
+            const caller = new XMLHttpRequest();
+            const url = 'http://localhost:8080/generate?';
+            caller.open('POST',url);     
+            caller.setRequestHeader('Content-Type', 'application/json');
+            caller.onload = function() {
+            response_got=JSON.parse(caller.responseText);
+            //console.log(response_got);
+            //console.log(caller.status);
+            //console.log(caller.statusText);
+            if( response_got.status === 100 && window.confirm(`OTP will be sent to ${data.email}`) === true ){
+                window.location.href = "./verification.html";
+            }else{
+                alert(response_got.message);
+            }
+        }
+        caller.send(obj);
+    }
+
+
+    function check_length(name){
+        var length = document.getElementById(name).value.length;
+        var text_color;
+        if( name == "otp"){
+            if( length==6 ){
+                text_color = "Green";
+            }else{
+                text_color = "Red";
+            }
+        }else{
+            if( length>=8 ){
+                text_color = "Green";
+            }else{
+                text_color = "Red";
+            }
+        }
+        document.getElementById(name).style.color = text_color;
+    }
+
+
+    function check_conditions(){
+        var otp = document.getElementById('otp').value;
+        var pass_1 = document.getElementById('password_1').value;
+        var pass_2 = document.getElementById('password_2').value;
+        if( !otp && (!pass_1 && !pass_2) ){
+            alert("Enter the details");
+        }else if( !otp || !pass_1 || !pass_2 ){
+            if( !otp ){
+                if( !pass_1 || !pass_2 ){
+                    alert("OTP and Either of the password is missing");
+                }else{
+                    alert("OTP missing");
+                }
+            }else if( !pass_1 && !pass_2 ){
+                alert("Set a Password");    
+            }else{
+                alert("Enter your Password in both the Fields");
+            }
+        }else{
+            if( otp.length != 6 && ( pass_1.length < 8 && pass_2.length < 8 )){
+                alert("OTP and Passwords not valid");
+            }else if( otp.length != 6 || pass_1.length < 8 || pass_2.length < 8 ){
+                if( otp.length != 6 ){
+                    if( pass_1.length < 8 ||pass_2.length < 8 ){
+                        alert("OTP and Either of the password is invalid");
+                    }else{
+                        alert("OTP Invalid");
+                    }
+                }else{
+                    if( pass_1.length < 8 && pass_2.length < 8 ){
+                        alert("Passwords invalid");
+                    }else{
+                        alert("Either of the password is invalid");
+                    }
+                }
+            }else{
+                if( pass_1 != pass_2){
+                    alert("Passwords not matching");
+                }else{
+                    api_otp();
+                }
+            }
+        }
+
+    }
+    </script>
+</head>
+<body>
+    <H1 id="heading">VERIFICATION WINDOW</H1> 
+    <p id="text">OTP SENT TO </p> 
+    <div align="center" id="detail_box">
+    <form>
+    Enter your OTP <input type="number" name="otp" class="textbox" oninput="check_length('otp')" id="otp"><br><br>
+    Create Password <input type="password" name="password" class="textbox" oninput="check_length('password_1')" id="password_1"><br>
+    ReEnter Password <input type="password" class="textbox" oninput="check_length('password_2')" id="password_2"><br><br>
+    <input type="reset" value="  Clear  " class="buttons">
+    <input type="button" value="Sign  Up" class="buttons" onclick="check_conditions()"><br><br>
+    </form>
+</div>
+<script>
+    var cookie_data = decodeURIComponent(document.cookie);
+    cookie_data=cookie_data.slice(cookie_data.indexOf("=")+1);
+    document.getElementById("text").innerText+=` ${cookie_data}`;
+    </script>
+</body>
+</html>
