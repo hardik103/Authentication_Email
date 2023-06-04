@@ -6,6 +6,8 @@ import { DatabaseConnector } from './MongoDB/app.connection';
 import { MongoService } from './MongoDB/app.service';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Emailservice } from './Mailer/app.service';
+import { AuthController } from './auth/auth.controller';
+import { AuthService } from './auth/auth.service';
 
 @Module({
   imports: [ConfigModule.forRoot(),DatabaseConnector,
@@ -19,7 +21,7 @@ import { Emailservice } from './Mailer/app.service';
         }
       }
     })],
-  controllers: [AppController],
-  providers: [AppService,MongoService,Emailservice],
+  controllers: [AppController,AuthController],
+  providers: [AppService,AuthService,MongoService,Emailservice],
 })
 export class AppModule {}

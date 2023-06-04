@@ -76,7 +76,7 @@ export class MongoService {
       "email": details.email,
       "mobile": details.mobile,
       "otp-resend": 3,
-      "otp-verify": 6,
+      "otp-verify": 3,
       "otp": 0
     });
   }

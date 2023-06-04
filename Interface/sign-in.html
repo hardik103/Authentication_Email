@@ -140,15 +140,16 @@
         <br>
     <form id="credentials">
     Email<br>
-    <input type="email" name="email" class="textbox"><br><br>
+    <input type="email" name="email" class="textbox" required><br><br>
     Password<br>
-    <input type="password" name="password" class="textbox"><br><br>
+    <input type="password" name="password" class="textbox" required><br><br>
+    <p id="error"></p>
     <input type="reset" value="CLEAR" class="buttons">
     <input type="button" value="SIGN IN" class="buttons" onclick="api_credentials()"><br><br>
     </form>
     </div>
     <p id="text">
-        NOT YET SIGNED UP ?<a href="/Interface/sign-up.html"><br><input type="button" value="SIGN UP" class="buttons"></a><br>
+        NOT YET SIGNED UP ?<a href="/sign-up"><br><input type="button" value="SIGN UP" class="buttons"></a><br>
         FORGOT PASSWORD ?<br><input type="button" value="RESET" class="buttons" onclick="reset_section()"> 
     </p>
     <form id="reset" align="center"></form>

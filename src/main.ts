@@ -7,7 +7,8 @@ async function bootstrap() {
   app.use(cookieParser());
   let port=process.env.LOCAL_HOST_PORT;
   await app.listen(port);
-  console.log(`You're good to go\nhttp://localhost:${port}/direct`)
+  console.log("...................................................")
+  console.log(`http://localhost:${port}/sign-up`)
   console.log("...................................................")
 }
 bootstrap();

@@ -4,73 +4,178 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUIZITIATE</title>
+    <title>Document</title>
     <style>
-        body{
-            background-image: url("C:/Users/Hardik/OneDrive/Documents/IDE/Interface/assets/img/Original.jpg");
-            background-position: center center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-size: cover;
-        }
-        #heading
-        {
-            font-size: clamp(2.4vw,3.2vh,2.5vh);
-            color: rgb(255, 255, 255);
-            font-weight: bold;
-            border-radius: 40px;
-            margin-top:23.6vh;
-            margin-left: 17%;
-            margin-right: 17%;
-            text-align: center;
-            font-family:Georgia, 'Times New Roman', Times, serif;
-        }
-        #hr
-        {
-            margin-left: 15%;
-            margin-right: 15%;
-        }
-        #detail_box
-        {
-            font-size: clamp(1.6vw,2.3vh,2.6vh);
-            margin-left: 20%;
-            margin-right: 20%;
-            font-family:'Courier New', Courier, monospace;
-            font-weight: bold;
-            text-align: center;
-            font-weight:bold;
-            color: rgb(255, 255, 255);
-        }
-        .buttons
-        {
-            font-size: clamp(2.2vw,2.7vh,2.5vh);
-            font-family:cursive;
-            border-radius: 20px;
-            padding-left: 4.5vw;
-            padding-right: 4.5vw;
+      body{
+        margin:0;
+      }
+            
+      #navbar {
+        overflow: hidden;
+        position:fixed;
+        width:100%;
+        top: 0;
+        background-color: #333;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        padding-top: 0.5%;
+        padding-bottom: 0.5%;
+      }
 
-        }
-        #extras
-        {
-            margin-top: 14vh;
-        }
-        a
-        {
-            padding-left: 4.5vw;
-            padding-right: 4.5vw;
+      li .left{
+        float: left;
+      }
 
-        }
+      li .right{
+        float: right;
+      }
+
+      li a {
+        display: block;
+        color: white;
+        text-align: center;
+        font-size: 25px;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        text-decoration: none;
+        padding: 2px 2px 2px 2px;
+}
+
+img{
+  border-radius: 25px;
+}
+
+li a:hover {
+  background-color: aqua;
+  color: #000;
+}
+
+
+* {box-sizing: border-box;}
+
+/* Button used to open the contact form - fixed at the bottom of the page */
+.open-button {
+  background-color: #555;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 23px;
+  right: 28px;
+  width: 280px;
+}
+
+/* The popup form - hidden by default */
+.form-popup {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+}
+
+/* Add styles to the form container */
+.form-container {
+  max-width: 300px;
+  padding: 10px;
+  background-color: white;
+  filter:blur(0px);
+}
+
+/* Full-width input fields */
+.form-container input[type=text], .form-container input[type=password] {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: #f1f1f1;
+}
+
+/* When the inputs get focus, do something */
+.form-container input[type=text]:focus, .form-container input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Set a style for the submit/login button */
+.form-container .btn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
+}
+
+/* Add a red background color to the cancel button */
+.form-container .cancel {
+  background-color: red;
+}
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+
     </style>
 </head>
 <body>
-    <p id="heading">QUIZ CREATION AND HOSTING</p> 
-    <hr id="hr">
-    <div id="detail_box">
-        Create an MCQ based quiz with the questions and options that you want. Manage Sections and Questions in each Section. Free and easy Hosting.
-    </div>
-    <div id="extras" align="center">
-        <a href="/Interface/sign-in.html"><input type="button" class="buttons" value="SIGN IN"></a>
-        <a href="/Interface/sign-up.html"><input type="button" class="buttons" value="SIGN UP"></a>
-    </div>
+    <ul id="navbar">
+            <li><a href="#" class="left"><img src="\assets\img\download.png" alt="logo" width="30"></a></li>
+            <li><a href="#" class="left">ADD QUESTIONS</a></li>
+            <li><a href="#" class="left">ADD SECTIONS</a></li>
+            <li><a href="#" class="left">ABOUT</a></li>
+            <li><a href="#" class="left">f</a></li>
+            <li><a href="#" class="left">d</a></li>
+            <li><a href="#" class="right">LOGOUT</a></li>
+            <li><a href="#" class="right">PROFILE</a></li>
+            
+    </ul>
+
+    <div id="body">
+      <h2>Popup Form</h2>
+      <p>Click on the button at the bottom of this page to open the login form.</p>
+      <p>Note that the button and the form is fixed - they will always be positioned to the bottom of the browser window.</p>
+      
+      <button class="open-button" onclick="openForm()">Open Form</button>
+
+      1hdfsd<br>2hdfsd<br>3hdfsd<br>4hdfsd<br>5hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>
+      1hdfsd<br>2hdfsd<br>3hdfsd<br>4hdfsd<br>5hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>hdfsd<br>
+      
+      </div>
+      <div class="form-popup" id="myForm">
+        <form action="/page.php" class="form-container">
+          <h1>Login</h1>
+      
+          <label for="email"><b>Email</b></label>
+          <input type="text" placeholder="Enter Email" name="email" required>
+      
+          <label for="psw"><b>Password</b></label>
+          <input type="password" placeholder="Enter Password" name="psw" required>
+      
+          <button type="submit" class="btn">Login</button>
+          <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+        </form>
+
+      </div>
+      
+      <script>
+      function openForm() {
+        document.getElementById("body").style.filter = "blur(2px)";
+        document.getElementById("myForm").style.display = "block";
+        document.getElementsByClassName("form-popup").style.filter = "blur(0px)";
+      }
+      
+      function closeForm() {
+        document.getElementById("body").style.filter = "blur(0px)";
+        document.getElementById("myForm").style.display = "none";
+        document.getElementsByClassName("form-popup").style.filter = "blur(0px)";
+      }
+      </script>
 </body>
 </html>

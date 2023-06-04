@@ -8,25 +8,27 @@ export class Emailservice {
     private readonly mongoService: MongoService) {}
 
   async send_email( email : string ) : Promise<any> {
-    var otp = 0;
-    console.log("Generating OTP...");
-    do{
-      otp=Math.round(Math.random()*1000000);
-
-    }while( otp < 100000 )
-    console.log("OTP Generated");
-    console.log(otp);
-    console.log("Sending Email...");
-    /*await this.mailService.sendMail({
-     to: email,
-     from: process.env.SENDER_EMAIL,
-     subject: `Hardy.com Login OTP`,
-     text: `Hi,\nYour OTP to login to Hardy.com is ${otp}`,
-    });
-    console.log("Email Sent");*/
-    return otp;
-  };
-
-  
-
+    try{
+      var otp = 0;
+      //console.log("Generating OTP...");
+      do{
+        otp=Math.round(Math.random()*1000000);
+      }while( otp < 100000 )
+      //console.log("OTP Generated");
+      //console.log(otp);
+      //console.log("Sending Email...");
+      var status = await this.mailService.sendMail({
+        to: email,
+        from: process.env.SENDER_EMAIL,
+        subject: `Hardy.com Login OTP`,
+        text: `Hi,\nYour OTP to login to Hardy.com is ${otp}`,
+      });
+      if(status){
+        return otp;
+      }
+      //console.log("Email Sent");
+    }catch{
+      return 400;
+    }
+  }
 }
