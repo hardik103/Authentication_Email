@@ -72,18 +72,14 @@
                     //console.log(response_got);
                     //console.log(caller.status);
                     //console.log(caller.statusText);
-                    if( response_got.status != 991 ){
-                        document.getElementById('error').innerHTML=response_got.message;
-                        //window.location.href = "/verify-email";
+                    if( response_got.status == 101 ){
+                        window.location.href = "/verify-email";
                     }else{
                         document.getElementById('error').innerHTML=response_got.message;
                     }
                 //console.log(response_got.message);
             }
             caller.send(sender);   
-        }
-        function remove_error(){
-            document.getElementById('error').innerHTML='--------------------';
         }
     </script>
 </head>

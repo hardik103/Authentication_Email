@@ -8,6 +8,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { Emailservice } from './Mailer/app.service';
 import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
+import { JWTService } from './JWT/jwt.service';
+import { JWTController } from './JWT/jwt.controller';
 
 @Module({
   imports: [ConfigModule.forRoot(),DatabaseConnector,
@@ -21,7 +23,7 @@ import { AuthService } from './auth/auth.service';
         }
       }
     })],
-  controllers: [AppController,AuthController],
-  providers: [AppService,AuthService,MongoService,Emailservice],
+  controllers: [AppController,AuthController,JWTController],
+  providers: [AppService,AuthService,MongoService,Emailservice,JWTService],
 })
 export class AppModule {}

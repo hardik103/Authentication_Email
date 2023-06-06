@@ -83,19 +83,63 @@ export class MongoService {
   
 //..........................................................................................................................
   
-  async fetch_resend_count( email:string ) : Promise<any> {
+  async fetch_unregistered_count( email:string ) : Promise<any> {
     return await this.connect.db('user-unregistered').collection('attempts').findOne({"email":email});
   }
 
-  async update_resend_count( email:string ) : Promise<any> {
+  async update_unregistered_resend_count( email:string ) : Promise<any> {
     return await this.connect.db('user-unregistered').collection('attempts').updateOne({"email":email},{$inc:{
       "otp-resend": -1
     }});
   }
 
-  async update_otp(email:string,otp:number) : Promise<any> {
+  async update_unregistered_verify_count( email:string ) : Promise<any> {
+    return await this.connect.db('user-unregistered').collection('attempts').updateOne({"email":email},{$inc:{
+      "otp-verify": -1
+    }});
+  }
+
+  async update_unregistered_otp(email:string,otp:number) : Promise<any> {
     return await this.connect.db('user-unregistered').collection('attempts').updateOne({"email":email},{$set:{
       "otp": otp
+    }});
+  }
+
+  async match_unregistered_otp(email:string,otp:number) : Promise<any> {
+    return await this.connect.db('user-unregistered').collection('attempts').findOne({"email":email,"otp": otp});
+  }
+
+  //..............................................................................................................
+
+  async fetch_registered_count( email:string ) : Promise<any> {
+    return await this.connect.db('user-registered').collection('attempts').findOne({"email":email});
+  }
+
+  async update_registered_resend_count( email:string ) : Promise<any> {
+    return await this.connect.db('user-registered').collection('attempts').updateOne({"email":email},{$inc:{
+      "otp-resend": -1
+    }});
+  }
+
+  async update_registered_verify_count( email:string ) : Promise<any> {
+    return await this.connect.db('user-registered').collection('attempts').updateOne({"email":email},{$inc:{
+      "otp-verify": -1
+    }});
+  }
+
+  async update_registered_otp(email:string,otp:number) : Promise<any> {
+    return await this.connect.db('user-registered').collection('attempts').updateOne({"email":email},{$set:{
+      "otp": otp
+    }});
+  }
+
+  async match_registered_otp(email:string,otp:number) : Promise<any> {
+    return await this.connect.db('user-registered').collection('attempts').findOne({"email":email,"otp": otp});
+  }
+
+  async update_credentials(email:string,password:string) : Promise<any> {
+    return await this.connect.db('user-registered').collection('credentials').updateOne({"email":email},{$set:{
+      "password": password
     }});
   }
 
@@ -120,15 +164,15 @@ export class MongoService {
   //...........................................................................................................
 
   async reinsert_attempts( document : Object ) : Promise<any> {
-    return await this.connect.db('user-unregistered').collection('attempts').insertOne(document);
+    return await this.connect.db('user-registered').collection('attempts').insertOne(document);
   }
 
   async reinsert_details( document : Object ) : Promise<any> {
-    return await this.connect.db('user-unregistered').collection('details').insertOne(document);
+    return await this.connect.db('user-registered').collection('details').insertOne(document);
   }
 
   async reinsert_credentials( document : Object ) : Promise<any> {
-    return await this.connect.db('user-unregistered').collection('details').insertOne(document);
+    return await this.connect.db('user-registered').collection('credentials').insertOne(document);
   }
 
   //...........................................................................................................
@@ -143,6 +187,22 @@ export class MongoService {
 
   async demo_remove() :Promise<any>{
     await this.connect.db('new').dropCollection('new');
+  }
+
+  //............................................................................................................
+
+  async update_all_unregistered_attempts() :Promise<any> {
+    await this.connect.db('user-unregistered').collection('attempts').updateMany({},{$set:{
+      "otp-resend":3,
+      "otp-verify":3,
+    }})
+  }
+
+  async update_all_registered_attempts() :Promise<any> {
+    await this.connect.db('user-registered').collection('attempts').updateMany({},{$set:{
+      "otp-resend":3,
+      "otp-verify":3,
+    }})
   }
 
 }

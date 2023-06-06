@@ -122,9 +122,31 @@ li a:hover {
   opacity: 1;
 }
 
-    </style>
+  </style>
+  <script>
+    function auto_detect(){
+      var cookie_data = decodeURIComponent(document.cookie);
+      var token = cookie_data.slice(cookie_data.indexOf("=")+1);
+      if( token != ""){
+      }else{
+        window.location.href= "/";
+      }
+    }
+
+    function openForm() {
+      document.getElementById("body").style.filter = "blur(2px)";
+      document.getElementById("myForm").style.display = "block";
+      document.getElementsByClassName("form-popup").style.filter = "blur(0px)";
+    }
+    
+    function closeForm() {
+      document.getElementById("body").style.filter = "blur(0px)";
+      document.getElementById("myForm").style.display = "none";
+      document.getElementsByClassName("form-popup").style.filter = "blur(0px)";
+      }
+  </script>
 </head>
-<body>
+<body onload="auto_detect()">
     <ul id="navbar">
             <li><a href="#" class="left"><img src="\assets\img\download.png" alt="logo" width="30"></a></li>
             <li><a href="#" class="left">ADD QUESTIONS</a></li>
@@ -164,18 +186,5 @@ li a:hover {
 
       </div>
       
-      <script>
-      function openForm() {
-        document.getElementById("body").style.filter = "blur(2px)";
-        document.getElementById("myForm").style.display = "block";
-        document.getElementsByClassName("form-popup").style.filter = "blur(0px)";
-      }
-      
-      function closeForm() {
-        document.getElementById("body").style.filter = "blur(0px)";
-        document.getElementById("myForm").style.display = "none";
-        document.getElementsByClassName("form-popup").style.filter = "blur(0px)";
-      }
-      </script>
 </body>
 </html>

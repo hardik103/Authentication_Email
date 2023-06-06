@@ -67,56 +67,34 @@
             font-weight: bold;
             color: #ffffff;
         }
-    </style>
+        </style>
     <script>
     var reset_loaded = false;
     var response_got;
-    function api_credentials(){
-        const form = document.querySelector("#credentials");
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData);
-        const sender = JSON.stringify(data);
 
-        const caller = new XMLHttpRequest();
-        const url = 'http://localhost:8080/authenticate';
-        caller.open('POST',url);     
-        caller.setRequestHeader('Content-Type', 'application/json');
-        caller.onload = function() {
-            response_got=JSON.parse(caller.responseText);
-            //console.log(response_got);
-            //console.log(caller.status);
-            //console.log(caller.statusText);
-            if( response_got.status === 100 && window.confirm(`OTP will be sent to ${data.email}`) === true ){
-                    window.location.href = "./verification.html";
-            }else{
-                alert(response_got.message);
+    function auto_detect(){
+        var cookie_data = decodeURIComponent(document.cookie);
+        var token = cookie_data.slice(cookie_data.indexOf("=")+1);
+        if( token != ""){
+            var obj = `{"token":"${token}"}`;
+    
+            const caller = new XMLHttpRequest();
+            const url = '/jwt/login';
+            caller.open('POST',url);     
+            caller.setRequestHeader('Content-Type', 'application/json');
+            caller.onload = function() {
+                response_got=JSON.parse(caller.responseText);
+                //console.log(response_got);
+                //console.log(caller.status);
+                //console.log(caller.statusText);
+                if( response_got.status === 109 ){
+                    window.location.href = "/home";
+                }
             }
+            caller.send(obj);
         }
-        caller.send(sender);
     }
-    function api_reset(){
-        const form = document.querySelector("#reset");
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData);
-        const sender = JSON.stringify(data);
-        
-        const caller = new XMLHttpRequest();
-        const url = 'http://localhost:8080/reset';
-        caller.open('POST',url);     
-        caller.setRequestHeader('Content-Type', 'application/json');
-        caller.onload = function() {
-            response_got=JSON.parse(caller.responseText);
-            //console.log(response_got);
-            //console.log(caller.status);
-            //console.log(caller.statusText);
-            if( response_got.status === 100 && window.confirm(`sign in to  ${data.email} ?`) === true ){
-                    document.write("signed in");
-            }else{
-                alert(response_got.message);
-            }
-        }
-        caller.send(sender);
-    }
+
     function reset_section(){
         
         if(reset_loaded==false){
@@ -131,9 +109,58 @@
             reset_loaded=false;
         }
     }
+    
+    function api_credentials(){
+        const form = document.querySelector("#credentials");
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData);
+        const sender = JSON.stringify(data);
+
+        const caller = new XMLHttpRequest();
+        const url = '/auth/login';
+        caller.open('POST',url);     
+        caller.setRequestHeader('Content-Type', 'application/json');
+        caller.onload = function() {
+            response_got=JSON.parse(caller.responseText);
+            //console.log(response_got);
+            //console.log(caller.status);
+            //console.log(caller.statusText);
+            if( response_got.status == 108 ){
+                    auto_detect();
+            }else{
+                alert(response_got.message);
+            }
+        }
+        caller.send(sender);
+    }
+
+    function api_reset(){
+        const form = document.querySelector("#reset");
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData);
+        const sender = JSON.stringify(data);
+        let obj = sender.substring(0,sender.length-1);
+        obj = obj.concat(`,"mode":"reset"}`)
+        const caller = new XMLHttpRequest();
+        const url = '/auth/resend';
+        caller.open('POST',url);     
+        caller.setRequestHeader('Content-Type', 'application/json');
+        caller.onload = function() {
+            response_got=JSON.parse(caller.responseText);
+            //console.log(response_got);
+            //console.log(caller.status);
+            //console.log(caller.statusText);
+            if( response_got.status == 103 ){
+                window.location.href='/verify-email';
+            }else{
+                alert(response_got.message);
+            }
+        }
+        caller.send(obj);
+    }
     </script>
 </head>
-<body>
+<body onload="auto_detect()">
     <H1 id="heading">SIGN-IN WINDOW</H1> 
     <p id="text">ENTER YOUR CREDENTIALS</p>
     <div id="detail_box">
@@ -152,6 +179,7 @@
         NOT YET SIGNED UP ?<a href="/sign-up"><br><input type="button" value="SIGN UP" class="buttons"></a><br>
         FORGOT PASSWORD ?<br><input type="button" value="RESET" class="buttons" onclick="reset_section()"> 
     </p>
+    <p id="error"></p>
     <form id="reset" align="center"></form>
 </body>
 </html>

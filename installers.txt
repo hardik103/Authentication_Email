@@ -3,5 +3,6 @@ new project = nest new
 mongodb = npm install mongodb --save
 .env configure = npm i --save @nestjs/config
 mailer = npm install --save @nestjs-modules/mailer nodemailer
+jsonwebtoken = npm install jsonwebtoken
 //cookie parser = npm i cookie-parser
 class validator = npm i --save class-validator
